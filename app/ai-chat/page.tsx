@@ -43,7 +43,7 @@ export default function AIChat() {
     setLoading(false);
   };
 
-  const handleKeyDown = (e) => {
+  const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Enter") sendMessage();
   };
 
