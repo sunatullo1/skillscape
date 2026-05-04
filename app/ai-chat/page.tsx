@@ -36,7 +36,7 @@ export default function AIChat() {
       const data = await response.json();
       const aiReply = data.content[0].text;
       setMessages([...newMessages, { role: "ai", text: aiReply }]);
-    } catch (error) {
+    } catch {
       setMessages([...newMessages, { role: "ai", text: "Sorry, I had a connection issue. Please try again!" }]);
     }
 
