@@ -1,15 +1,53 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { supabase } from "../lib/supabase";
 import useLang from "../components/useLang";
 import LanguageSwitcher from "../components/LanguageSwitcher";
 
 export default function SignUp() {
   const t = useLang();
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
   const [form, setForm] = useState({
     name: "", email: "", password: "",
     nativeLanguage: "", learningLanguage: "", level: ""
   });
+
+  const handleSignUp = async () => {
+    if (!form.name || !form.email || !form.password || !form.nativeLanguage || !form.learningLanguage || !form.level) {
+      setError("Please fill in all fields!");
+      return;
+    }
+    setLoading(true);
+    setError("");
+
+    const { data, error: signUpError } = await supabase.auth.signUp({
+      email: form.email,
+      password: form.password,
+    });
+
+    if (signUpError) {
+      setError(signUpError.message);
+      setLoading(false);
+      return;
+    }
+
+    if (data.user) {
+      await supabase.from("profiles").insert({
+        id: data.user.id,
+        name: form.name,
+        native_language: form.nativeLanguage,
+        learning_language: form.learningLanguage,
+        level: form.level,
+      });
+    }
+
+    setLoading(false);
+    router.push("/dashboard");
+  };
 
   return (
     <main className="min-h-screen bg-gray-50">
@@ -20,6 +58,13 @@ export default function SignUp() {
         <div className="bg-white p-8 rounded-2xl shadow-md w-full max-w-md">
           <h1 className="text-2xl font-bold text-blue-600 text-center mb-2">SkillScape</h1>
           <h2 className="text-xl font-semibold text-gray-800 text-center mb-6">{t.signup_title}</h2>
+
+          {error && (
+            <div className="bg-red-50 text-red-600 px-4 py-3 rounded-lg mb-4 text-sm">
+              {error}
+            </div>
+          )}
+
           <div className="flex flex-col gap-4">
             <input type="text" placeholder={t.signup_name}
               className="border rounded-lg px-4 py-3 text-gray-700 focus:outline-none focus:border-blue-500"
@@ -51,8 +96,11 @@ export default function SignUp() {
               <option>B1 - Intermediate</option><option>B2 - Upper Intermediate</option>
               <option>C1 - Advanced</option><option>C2 - Fluent</option>
             </select>
-            <button className="bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700">
-              {t.signup_btn}
+            <button
+              onClick={handleSignUp}
+              disabled={loading}
+              className="bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 disabled:opacity-50">
+              {loading ? "Creating account..." : t.signup_btn}
             </button>
           </div>
           <p className="text-center text-gray-500 mt-4">
