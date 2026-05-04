@@ -41,23 +41,32 @@ export default function Home() {
       </section>
 
       {/* 3 Features */}
-      <section className="grid grid-cols-1 md:grid-cols-3 gap-8 px-16 py-16 bg-gray-50">
-        <div className="bg-white p-8 rounded-2xl shadow-sm text-center">
-          <div className="text-4xl mb-4">🤖</div>
-          <h3 className="text-xl font-bold mb-2">{t.feature1_title}</h3>
-          <p className="text-gray-500">{t.feature1_desc}</p>
-        </div>
-        <div className="bg-white p-8 rounded-2xl shadow-sm text-center">
-          <div className="text-4xl mb-4">👥</div>
-          <h3 className="text-xl font-bold mb-2">{t.feature2_title}</h3>
-          <p className="text-gray-500">{t.feature2_desc}</p>
-        </div>
-        <div className="bg-white p-8 rounded-2xl shadow-sm text-center">
-          <div className="text-4xl mb-4">🎓</div>
-          <h3 className="text-xl font-bold mb-2">{t.feature3_title}</h3>
-          <p className="text-gray-500">{t.feature3_desc}</p>
-        </div>
-      </section>
+<section className="grid grid-cols-1 md:grid-cols-3 gap-8 px-16 py-16 bg-gray-50">
+  <Link href="/ai-chat">
+    <div className="bg-white p-8 rounded-2xl shadow-sm text-center hover:shadow-md hover:border-2 hover:border-blue-500 border-2 border-transparent transition-all cursor-pointer">
+      <div className="text-4xl mb-4">🤖</div>
+      <h3 className="text-xl font-bold mb-2">{t.feature1_title}</h3>
+      <p className="text-gray-500">{t.feature1_desc}</p>
+      <span className="mt-4 inline-block text-blue-600 font-semibold">Try it →</span>
+    </div>
+  </Link>
+  <Link href="/match">
+    <div className="bg-white p-8 rounded-2xl shadow-sm text-center hover:shadow-md hover:border-2 hover:border-green-500 border-2 border-transparent transition-all cursor-pointer">
+      <div className="text-4xl mb-4">👥</div>
+      <h3 className="text-xl font-bold mb-2">{t.feature2_title}</h3>
+      <p className="text-gray-500">{t.feature2_desc}</p>
+      <span className="mt-4 inline-block text-green-600 font-semibold">Try it →</span>
+    </div>
+  </Link>
+  <Link href="/tutors">
+    <div className="bg-white p-8 rounded-2xl shadow-sm text-center hover:shadow-md hover:border-2 hover:border-purple-500 border-2 border-transparent transition-all cursor-pointer">
+      <div className="text-4xl mb-4">🎓</div>
+      <h3 className="text-xl font-bold mb-2">{t.feature3_title}</h3>
+      <p className="text-gray-500">{t.feature3_desc}</p>
+      <span className="mt-4 inline-block text-purple-600 font-semibold">Try it →</span>
+    </div>
+  </Link>
+</section>
 
       {/* Footer */}
       <footer className="text-center py-8 text-gray-400">
