@@ -1,12 +1,40 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { supabase } from "../lib/supabase";
 import useLang from "../components/useLang";
 import LanguageSwitcher from "../components/LanguageSwitcher";
 
 export default function Login() {
   const t = useLang();
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
   const [form, setForm] = useState({ email: "", password: "" });
+
+  const handleLogin = async () => {
+    if (!form.email || !form.password) {
+      setError("Please fill in all fields!");
+      return;
+    }
+    setLoading(true);
+    setError("");
+
+    const { error: loginError } = await supabase.auth.signInWithPassword({
+      email: form.email,
+      password: form.password,
+    });
+
+    if (loginError) {
+      setError(loginError.message);
+      setLoading(false);
+      return;
+    }
+
+    setLoading(false);
+    router.push("/dashboard");
+  };
 
   return (
     <main className="min-h-screen bg-gray-50">
@@ -17,6 +45,13 @@ export default function Login() {
         <div className="bg-white p-8 rounded-2xl shadow-md w-full max-w-md">
           <h1 className="text-2xl font-bold text-blue-600 text-center mb-2">SkillScape</h1>
           <h2 className="text-xl font-semibold text-gray-800 text-center mb-6">{t.login_title}</h2>
+
+          {error && (
+            <div className="bg-red-50 text-red-600 px-4 py-3 rounded-lg mb-4 text-sm">
+              {error}
+            </div>
+          )}
+
           <div className="flex flex-col gap-4">
             <input type="email" placeholder={t.signup_email}
               className="border rounded-lg px-4 py-3 text-gray-700 focus:outline-none focus:border-blue-500"
@@ -24,8 +59,11 @@ export default function Login() {
             <input type="password" placeholder={t.signup_password}
               className="border rounded-lg px-4 py-3 text-gray-700 focus:outline-none focus:border-blue-500"
               onChange={(e) => setForm({...form, password: e.target.value})} />
-            <button className="bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700">
-              {t.login_btn}
+            <button
+              onClick={handleLogin}
+              disabled={loading}
+              className="bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 disabled:opacity-50">
+              {loading ? "Logging in..." : t.login_btn}
             </button>
           </div>
           <p className="text-center text-gray-500 mt-4">
