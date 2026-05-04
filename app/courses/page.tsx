@@ -14,7 +14,7 @@ const courses = [
   { title: "Spanish for Travel", lang: "🇪🇸 Spanish", level: "A2", lessons: 12, color: "orange", emoji: "📒" },
 ];
 
-const levelColors = {
+const levelColors: Record<string, string> = {
   "A1": "bg-green-100 text-green-700",
   "A2": "bg-blue-100 text-blue-700",
   "B1": "bg-yellow-100 text-yellow-700",
